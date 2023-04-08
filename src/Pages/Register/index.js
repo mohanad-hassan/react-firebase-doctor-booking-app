@@ -28,6 +28,10 @@ const Register = () => {
     }
   };
 
+  React.useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) navigate("/");
+  }, []);
 
     return (
       <div className="flex justify-center items-center h-screen">

@@ -26,6 +26,11 @@ const Login = () => {
     }
   };
 
+
+  React.useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) navigate("/");
+  }, []);
   return (
     <div className="flex justify-center items-center h-screen">
     <Form  onFinish={onFinsh} layout="vertical" className="w-400 bg-white p-2" >
