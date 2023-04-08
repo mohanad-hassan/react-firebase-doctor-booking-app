@@ -2,12 +2,19 @@ import React from 'react'
 import {  Form, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginUser } from '../../apiCalls/createUser';
+import { useDispatch } from "react-redux";
+import { ShowLoader } from "../../redux/loaderSlice";
+
+
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const onFinsh = async (values) => {
     try {
+      dispatch(ShowLoader(true));
       const response = await LoginUser(values);
+      dispatch(ShowLoader(false));
       if (response.success) {
         message.success(response.message);
         localStorage.setItem(
@@ -23,6 +30,8 @@ const Login = () => {
       }
     } catch (error) {
       message.error(error.message);
+      dispatch(ShowLoader(false))
+
     }
   };
 

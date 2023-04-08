@@ -1,19 +1,23 @@
 import React from 'react'
 import { Form ,message} from 'antd'
 import { Link, useNavigate } from "react-router-dom";
-
 import {createUser} from '../../apiCalls/createUser'
+import { useDispatch } from "react-redux";
+import { ShowLoader } from "../../redux/loaderSlice";
+
 const Register = () => {
 
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
 
   const onFinsh = async (values) => {
     try {
+      dispatch(ShowLoader(true));
       const response = await createUser({
         ...values,
         role: "user",
       });
+      dispatch(ShowLoader(false));
       if (response.success) {
         message.success(response.message);
 
@@ -23,6 +27,8 @@ const Register = () => {
         message.error(response.message);
       }
     } catch (error) {
+      dispatch(ShowLoader(false));
+
       message.error(error.message);
 
     }
