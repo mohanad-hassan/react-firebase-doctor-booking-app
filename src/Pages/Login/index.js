@@ -1,10 +1,34 @@
 import React from 'react'
-import { Form } from 'antd'
-import { Link } from 'react-router-dom'
+import {  Form, message } from "antd";
+import { Link, useNavigate } from "react-router-dom";
+import { LoginUser } from '../../apiCalls/createUser';
 const Login = () => {
+  const navigate = useNavigate();
+
+  const onFinsh = async (values) => {
+    try {
+      const response = await LoginUser(values);
+      if (response.success) {
+        message.success(response.message);
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            ...response.data,
+            password: "",
+          })
+        );
+        navigate("/");
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (error) {
+      message.error(error.message);
+    }
+  };
+
   return (
     <div className="flex justify-center items-center h-screen">
-    <Form layout="vertical" className="w-400 bg-white p-2" >
+    <Form  onFinish={onFinsh} layout="vertical" className="w-400 bg-white p-2" >
       <h2 className="uppercase my-1">
         <strong>SHEYHELTHY Login</strong>
       </h2>

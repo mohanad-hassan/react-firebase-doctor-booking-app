@@ -1,10 +1,37 @@
 import React from 'react'
-import { Form } from 'antd'
-import { Link } from 'react-router-dom'
+import { Form ,message} from 'antd'
+import { Link, useNavigate } from "react-router-dom";
+
+import {createUser} from '../../apiCalls/createUser'
 const Register = () => {
+
+  const navigate = useNavigate();
+
+
+  const onFinsh = async (values) => {
+    try {
+      const response = await createUser({
+        ...values,
+        role: "user",
+      });
+      if (response.success) {
+        message.success(response.message);
+
+        setTimeout(() => {         navigate("/login",2500);
+      })
+      } else {
+        message.error(response.message);
+      }
+    } catch (error) {
+      message.error(error.message);
+
+    }
+  };
+
+
     return (
       <div className="flex justify-center items-center h-screen">
-        <Form layout="vertical" className="w-400 bg-white p-2" >
+        <Form layout="vertical" className="w-400 bg-white p-2" onFinish={onFinsh} >
           <h2 className="uppercase my-1">
             <strong>SHEYHELTHY Register</strong>
           </h2>
