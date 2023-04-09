@@ -1,4 +1,4 @@
-import { collection, addDoc, query, where, getDocs } from 'firebase/firestore'
+import { collection, addDoc, query, where, getDocs,getDoc,doc } from 'firebase/firestore'
 import firestoreDatabase from '../firebaseConfig'
 import CryptoJS from "crypto-js";
 
@@ -65,3 +65,37 @@ export const LoginUser = async (payload) => {
         return error;
     }
 };
+
+
+
+export const GetAllUsers = async () => {
+    try {
+      const users = await getDocs(collection(firestoreDatabase, "users"));
+      return {
+        success: true,
+        data: users.docs.map((doc) => {
+          return {
+            ...doc.data(),
+            id: doc.id,
+          };
+        }),
+      };
+    } catch (error) {
+      return error;
+    }
+  }
+  
+  export const GetUserById = async (id) => {
+    try {
+      const user = await getDoc(doc(firestoreDatabase, "users", id));
+      return {
+        success: true,
+        data: {
+          ...user.data(),
+          id: user.id,
+        },
+      };
+    } catch (error) {
+      return error;
+    }
+  }
